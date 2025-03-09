@@ -112,21 +112,22 @@ public class AppFrame implements ActionListener {
 
             buffered.close();
             get.disconnect();
-            System.out.println(stringBuilder.toString());
+
             ObjectMapper objectMapper=new ObjectMapper();
 
             JsonNode node =objectMapper.readTree(stringBuilder.toString());
 
+            System.out.println("API Response: " + stringBuilder.toString());
 
-            if (node.isArray()|| !node.isEmpty()) {
-                Currency currency=new Currency();
+            Currency currency=new Currency();
 
-                currency.setResponse(node.get((String) toCurrency.getSelectedItem()).asDouble());
-
-               Calculate(currency);
+            JsonNode currencyNode = node.get("curremcy");
+            if (currencyNode != null) {
+                currency.setCurremcy(currencyNode.asDouble());
+                Calculate(currency);
+            } else {
+                System.out.println("Currency not found in the API response.");
             }
-
-
 
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
@@ -151,9 +152,15 @@ public class AppFrame implements ActionListener {
 
     private void Calculate(Currency currency){
 
-        double amount = Double.parseDouble(from.getText()); // Kullanıcının girdiği miktar
+        try {
+            double amount = Double.parseDouble(from.getText());
+            to.setText(String.format("%.2f", currency.getCurremcy() * amount));
+            if (amount<=0)
+                throw new NumberFormatException();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(frame, "Please enter a valid number.");
+        }
 
-        to.setText(String.valueOf(currency.getResponse()*amount));
 
     }
 }

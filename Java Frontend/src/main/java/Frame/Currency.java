@@ -1,15 +1,15 @@
 package Frame;
 
 public class Currency {
-    public double getResponse() {
-        return response;
+    public double getCurremcy() {
+        return curremcy;
     }
 
-    public void setResponse(double response) {
-        this.response = response;
+    public void setCurremcy(double curremcy) {
+        this.curremcy = curremcy;
     }
 
-    private double response;
+    private double curremcy;
 
 
 
