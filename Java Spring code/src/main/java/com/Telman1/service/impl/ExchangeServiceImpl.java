@@ -9,11 +9,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ExchangeServiceImpl implements IExchangeService{
-	final private String apiUrl="https://v6.exchangerate-api.com/v6/e046fe4c95d65f096aa3c0d4/latest/USD";
+	final private String apiUrl="https://v6.exchangerate-api.com/v6/e046fe4c95d65f096aa3c0d4/latest/";
 	
 
 	@Override
-	public DtoExcahange getCurrency() {
+	public DtoExcahange getCurrency(String fromCurrency, String toCurrency) {
 		DtoExcahange dtoExcahange=new DtoExcahange();
 		
 		
@@ -23,21 +23,19 @@ public class ExchangeServiceImpl implements IExchangeService{
 		
 		
 		RestTemplate restTemplate=new RestTemplate();
-		String response=restTemplate.getForObject(apiUrl, String.class);
+		String response=restTemplate.getForObject(apiUrl+fromCurrency.toUpperCase(), String.class);
 		
 		ObjectMapper objectMapper=new ObjectMapper();
 		JsonNode node =objectMapper.readTree(response);
 		
 		JsonNode conversion =node.path("conversion_rates");
+		
+		if (conversion.get(toCurrency.toUpperCase())==null) {
+			throw new Exception();
+		}
 			
-			dtoExcahange.setAZN(conversion.get("AZN").asDouble());
-			dtoExcahange.setUSD(conversion.get("USD").asDouble());
-			dtoExcahange.setEUR(conversion.get("EUR").asDouble());
-			dtoExcahange.setRUB(conversion.get("RUB").asDouble());
-			dtoExcahange.setTRY(conversion.get("TRY").asDouble());
-			dtoExcahange.setGBP(conversion.get("GBP").asDouble());
-			
-		   
+			dtoExcahange.setCurremcy(conversion.get(toCurrency.toUpperCase()).asDouble());
+		  
 	
 		 } catch (Exception e) {
 			e.getMessage();

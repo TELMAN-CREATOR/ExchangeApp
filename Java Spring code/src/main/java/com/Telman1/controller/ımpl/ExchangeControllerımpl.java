@@ -2,6 +2,7 @@ package com.Telman1.controller.ımpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,10 +17,10 @@ public class ExchangeControllerımpl implements IExchangeController {
 	private ExchangeServiceImpl exchangeServiceImpl;
 
 	@Override
-	@GetMapping("/currencies")
-	public DtoExcahange getCurrency() {
+	@GetMapping("/{fromCurrency}/{toCurrency}")
+	public DtoExcahange getCurrency(@PathVariable(value = "fromCurrency") String fromCurrency, @PathVariable(value = "toCurrency") String toCurrency) {
 		
-		return exchangeServiceImpl.getCurrency();
+		return exchangeServiceImpl.getCurrency(fromCurrency, toCurrency);
 	}
 
 }

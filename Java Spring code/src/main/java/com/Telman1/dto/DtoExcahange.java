@@ -12,11 +12,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DtoExcahange {
 	
-	private Double USD;
-	private Double AZN;
-	private Double TRY;
-	private Double EUR;
-	private Double RUB;
-	private Double GBP;
+	private Double curremcy;
+	
 }
     
